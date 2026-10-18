@@ -46,7 +46,7 @@ output_dir=$2
 cutlass_dir=$3
 
 python3 gen_all_code.py \
-    --config-file $config_file \
+    --config-file "$config_file" \
     --gen-name FusedMultiGemmForward \
-    --output-dir $output_dir \
-    --cutlass-dir $cutlass_dir
+    --output-dir "$output_dir" \
+    --cutlass-dir "$cutlass_dir"
