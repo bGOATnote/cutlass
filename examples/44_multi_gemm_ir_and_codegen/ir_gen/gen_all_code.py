@@ -40,6 +40,7 @@ import replace_fix_impl_header
 import argparse
 import os
 import json
+import shutil
 
 
 parser = argparse.ArgumentParser(description="Generates Fused Multi-GEMM CUTLASS Kernels")
@@ -115,8 +116,8 @@ api = api_generator.gen_one_API(fuse_gemm_info, gen_name, for_fused_wrapper, out
 api.gen_code()
 
 # Generate C++ sample
-os.system("cp ../leaky_bias.h " + output_dir + "/sample/")
-os.system("cp ../utils.h " + output_dir + "/sample/")
+shutil.copyfile("../leaky_bias.h", output_dir + "/sample/leaky_bias.h")
+shutil.copyfile("../utils.h", output_dir + "/sample/utils.h")
 
 sample_dir = output_dir + "/sample/"
 sample = sample_creater.gen_test(fuse_gemm_info, gen_name, for_cutlass_gen_user_include_header_file, sample_dir)

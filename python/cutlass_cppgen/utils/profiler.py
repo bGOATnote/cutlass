@@ -142,12 +142,24 @@ class CUDAEventProfiler:
 
         batch_count = self.arguments.batch_count
 
-        cmd = f"{profiler_path} --kernels={kernel_name} --verification-providers={verification_providers} " \
-              f"--providers={provider} --m={problem_size.m()} --n={problem_size.n()} --k={problem_size.k()} " \
-              f"--batch_count={batch_count} --alpha={alpha} --beta={beta} "\
-              f"--warmup-iterations={self.warmup_iterations} --profiling-iterations={self.iterations}"
-
-        result = subprocess.getoutput(cmd)
+        cmd = [
+            profiler_path,
+            f"--kernels={kernel_name}",
+            f"--verification-providers={verification_providers}",
+            f"--providers={provider}",
+            f"--m={problem_size.m()}",
+            f"--n={problem_size.n()}",
+            f"--k={problem_size.k()}",
+            f"--batch_count={batch_count}",
+            f"--alpha={alpha}",
+            f"--beta={beta}",
+            f"--warmup-iterations={self.warmup_iterations}",
+            f"--profiling-iterations={self.iterations}",
+        ]
+        result = subprocess.run(
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            text=True, check=False,
+        ).stdout
 
         m = re.search(r"Runtime:\s+(?P<runtime>\d+.\d+)", result)
         runtime = float(m.group("runtime"))
